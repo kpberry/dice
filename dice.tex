@@ -106,17 +106,31 @@ This gives us 120 outcomes, which we can break up into 7 groups of 17 with one l
 
 \par The next follow-up question to this is whether or not we can achieve arbitrarily few throws for 7, or any number in general. 
 It's actually fairly easy to show that this is the case.
-Take a die with any number of faces $f_2$ that we want to roll, and $n$ dice with $f_1$ faces each.
+For example, take a die with any number of faces $f_2$ that we want to roll, and $n$ dice with $f_1$ faces each.
 We can throw all of the $n$ dice, giving us $f_1^n$ outcomes.
 Assuming $f_1^n$ is greater than $f_2$, we can then break these outcomes into $f_2$ groups with $k$ outcomes left over, where we would need to re-throw.
 This gives us an expected number of throws $E_n[\theta] = \frac{T}{t} = \frac{f_1^n}{f_1^n - k} = \frac{1}{1 - k/f_1^n}$, which approaches 1 as $n$ approaches infinity since $k/f_1^n$ approaches 0 as $n$ approaches infinity.
+
+\par Another question one might ask is how few throws we can achieve using only finitely many dice.
+If we're trying to roll a $d_{f_2}$ with a given set of dice $D$, we can choose to roll any subset $S\subseteq D$ whose product $\Pi_S=\prod_{d_{f_1}\in{S}}f_1$ is at least $f_2$ in order to minimize the expected number of throws.
+With this set of dice, the total number of outcomes $T$ is simply $\Pi_S$.
+If we use the same grouping trick as earlier, then the number of outcomes $t$ where we don't need to re-roll is the greatest multiple of $f_2$ which is less than $\Pi_S$.
+More precisely, we will not need to re-roll for $f_2\lfloor \Pi_S/f_2\rfloor$ of the possible $\Pi_S$ outcomes. 
+Thus, we will have an expected number of throws $E_S[\theta] = \frac{T}{t} = \frac{\Pi_S}{f_2\lfloor \Pi_S/f_2\rfloor}$.
+Unfortunately, it seems to be a computationally difficult task to find the subset $S$ which actually minimizes this expectation.
+Because for each die in $D$ we have a binary choice of whether or not to include it in $S$, there will be $2^{|D|}$ subsets of $D$ which we may need to consider.
+Na\"ively examining each of these subset individually takes exponential time and becomes intractible for even small sets of dice, e.g., 20 dice.
+A slightly less na\"ive algorithm for computing the optimal subset might be to consider only the subsets whose product is at least $f_2$, though this could still comprise every or nearly every subset of $D$, such as in the event that each element of $D$ has a face value of at least $f_2$.
+Because of the floor function in the expectation, there is no optimal substructure to the problem which would allow us to eliminate groups of candidate subsets at a time, as would normally done with dynamic programming.
+Thus, it seems that there is no easy way to compute the optimal number of throws for an arbitrary subset of given dice efficiently.
 
 \par This answer is not fully satisfying, however.
 While we can get the number of total throws arbitrarily close to 1, the total number of dice rolled simultaneously approaches infinity, which is, in some respects, impractical.
 A more satisfying answer would minimize the total number of dice ever rolled, rather than the number of throws\footnote{Another more satisfying answer would be to try to simultaneously minimize the number of throws and the number of dice rolled, but the optimal answer in this case is possibly subject to a preference of which value is more important to minimize}.
 The expected number of dice rolled is simply the expected number of throws, weighted by the number of dice rolled in each throw.
-For instance, $E_n[r] = nE_n[\theta]$ in the scheme above, since we threw $n$ dice each time.
-While we will briefly analyze the general case of rolling a set of heterogeneous dice later, it turns out that minimizing the number of identical dice rolled is much more interesting than minimizing the number of throws.
+For a general subset $S$ of a set of dice $D$, as defined above, the expectation is $E_S[r]=|S|E_S[\theta]$.
+
+\par An interesting case to analyze is when we have an unlimited set of the same die, as was the case when computing $E_n[\theta]$.
 If we take the definition of $E_n[\theta]$ from above and substitute $k$ with the actual value of the remainder function, we get the following expression to minimize: $$E_n[r] = \frac{nf_1^n}{f_1^n-k} = \frac{nf_1^n}{f_1^n-\left(f_1^n - f_2 \left \lfloor \frac{f_1^n}{f_2} \right \rfloor \right)} = \frac{n}{\frac{f_2}{f_1^n} \left \lfloor \frac{f_1^n}{f_2} \right \rfloor}$$ 
 Yuck! 
 That floor function and those exponents don't look very friendly, and it turns out that they complicate things significantly.
@@ -178,13 +192,6 @@ Now, the right hand side is in the canonical form with $C(n) = -n\log{f_1}-\log{
 meaning that for all $n$ greater than the value of the left hand expression, $E_{n+1}[r] > E_n[r]$.
 With this (fairly complicated) expression\footnote{This expression is even more complicated than I'm letting on. Since the W function is multi-valued, we need to be careful to take the value which makes the number of expected rolls positive.}, we now have a limited set of candidates to check to find the integer number of dice which globally minimizes the expected number of dice rolled.
 We only need to check the few values between $\lceil \log_{f_1}{f_2} \rceil$ and this value\footnote{Because $xe^x$ grows faster than $e^x$, the $W$ function grows slower than the logarithm function, meaning that we only have to consider $O(\log{f_1} + \log{f_2})$ possible minimum values.}, since all possible larger numbers will require more rolls in expectation. % TODO change the footnote with the rest of the analysis
-
-\par In general, for a given set of heterogenous dice $D$ from which we must choose a subset $P$ to roll, the optimal subset is algorithmically simple to define, but computationally inefficient to construct.
-We can simply enumerate all $2^{|D|}$ subsets $P \subseteq D$ of the dice and find the subset which minimizes the value: $$E_{P \subseteq D}[r] = \frac{|P|}{\frac{f_2}{\prod_{d_{f_1} \in P}{f_1}} \left\lfloor \frac{\prod_{d_{f_1} \in P}{f_1}}{f_2} \right\rfloor}.$$
-However, this obviously takes exponential time and becomes intractible for even small sets of dice, e.g., 20 dice.
-A slightly less na\"ive algorithm for computing the optimal subset would only consider the subsets whose product is at least $f_2$, though this could still comprise every or nearly every subset of $D$, such as in the event that each element of $D$ has a face value of at least $f_2$.
-Because of the floor function and the cyclic nature of the resulting function expectation function, there is no optimal substructure to the problem which would allow us to eliminate groups of candidate subsets at a time, as is normally done by dynamic programming.
-Thus, it seems that there is no easy way to compute the optimal number of rolls for an arbitrary subset of given dice efficiently.
 
 \par There is one last trick\footnote{As far as I know.} that we can use to reduce the expected number of rolls in general\footnote{Credit for this idea goes to Kenneth Adams.}.
 When we have a set of dice $D$ such that $p = \prod_{d_f\in D}d_f = f_2 + k$, we can ``reuse'' rejected rolls.
