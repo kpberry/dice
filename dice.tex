@@ -59,7 +59,7 @@ Clearly, then, any perfect rolling scheme which we come up with must have a numb
 \par While the $d_3$, $d_4$ combination failed to produce a way of rolling a $d_7$, there is another insight to be gleaned from this attempt.
 Namely, that we can roll a die whose face count is any product of the face counts of the dice we have. 
 This follows from the fact that we can simply enumerate $f$ outcomes of equal probability in order to roll a die with $f$ faces, and rolling a set of dice yields a number of equally likely outcomes which is the product of their number of faces.
-With this technique, and the fundamental theorem of arithmetic, we now realize that we only need to be concerned with being able to roll dice with a prime number of faces, since we can generate all other numbers from these.
+With this technique, and the fundamental theorem of algebra, we now realize that we only need to be concerned with being able to roll dice with a prime number of faces, since we can generate all other numbers from these.
 
 \par Which brings us back to rolling a 7.
 Despite the niceness and utility of our previous observations, we will need some new technique to solve this problem. 
@@ -89,8 +89,8 @@ Using the same $t$ and $T$ as before, we have to consider the number of throws i
 In either case, we have to throw at least once. 
 In the case that we succeed, we're done, so our total is one throw.
 If we fail, we're back at the beginning, so we have one throw, and we expect to throw the same number of times as if we hadn't thrown at all.
-Mathematically, this leads to the equation $$E(\theta) = \frac{t}{T} \cdot (1 + E(\theta | \text{success})) + \left(1 -\frac{t}{T} \right) \cdot (1 + E(\theta | \text{failure}))$$
-Since $E(\theta | \text{success}) = 0$ and $E(\theta | \text{failure}) = E(\theta)$, this equation simplifies to be: $$E(\theta) = \frac{t}{T} + \left(1 - \frac{t}{T} \right) \cdot (1 + E(\theta))$$
+Mathematically, this leads to the equation $E(\theta) = \frac{t}{T} \cdot (1 + E(\theta | \text{success})) + \left(1 -\frac{t}{T} \right) \cdot (1 + E(\theta | \text{failure}))$.
+Since $E(\theta | \text{success}) = 0$ and $E(\theta | \text{failure}) = E(\theta)$, this equation simplifies to be $E(\theta) = \frac{t}{T} + \left(1 - \frac{t}{T} \right) \cdot E(\theta)$.
 We can actually solve this algebraically to find that $E(\theta) = T/t$. 
 In the case of rolling a 7 sided die with a 6 sided die with 36 outcomes, as described above, the expected number of throws is thus 36/7, which is about 5.14 throws, while rolling a $d_7$ with a $d_8$ results in only $8/7 + 1 \approx 1.14$ throws.
 Thus, rolling an 8 sided die is clearly better in expectation.
@@ -109,17 +109,17 @@ It's actually fairly easy to show that this is the case.
 For example, take a die with any number of faces $f_2$ that we want to roll, and $n$ dice with $f_1$ faces each.
 We can throw all of the $n$ dice, giving us $f_1^n$ outcomes.
 Assuming $f_1^n$ is greater than $f_2$, we can then break these outcomes into $f_2$ groups with $r$ outcomes left over, where we would need to re-throw.
-This gives us an expected number of throws $$E_n(\theta) = \frac{T}{t} = \frac{f_1^n}{f_1^n - r} = \frac{1}{1 - r/f_1^n},$$ which approaches 1 as $n$ approaches infinity since $r/f_1^n$ approaches 0 as $n$ approaches infinity.
+This gives us an expected number of throws $E_n(\theta) = \frac{T}{t} = \frac{f_1^n}{f_1^n - r} = \frac{1}{1 - r/f_1^n}$, which approaches 1 as $n$ approaches infinity since $r/f_1^n$ approaches 0 as $n$ approaches infinity.
 
 \par Another question one might ask is how few throws we can achieve using only finitely many dice.
 In general, we'll try to roll a $d_{f_2}$ with a given a set of dice $D$. 
 The total number of outcomes $T$ for this set of dice will simply be the product of the number of faces of the dice in the set, $\Pi_D=\prod_{d_{f_1}\in{D}}f_1$.
 If we use the same grouping trick as earlier, then the number of outcomes $t$ where we don't need to re-roll is the greatest integer multiple of $f_2$ which is less than $\Pi_D$.
 More precisely, we will not need to re-roll for $f_2\lfloor \Pi_D/f_2\rfloor$ of the possible $\Pi_D$ outcomes. 
-Thus, we will have an expected number of throws: $$E_D(\theta) = \frac{T}{t} = \frac{\Pi_D}{f_2\lfloor \Pi_D/f_2\rfloor}$$
+Thus, we will have an expected number of throws $E_D(\theta) = \frac{T}{t} = \frac{\Pi_D}{f_2\lfloor \Pi_D/f_2\rfloor}$.
 Perhaps surprisingly, it is always better to roll the entire set of dice $D$ than it would be to roll any subset of $D$. 
 To prove this, it is sufficient to show that adding another die will never increase the number of expected rolls, since this will then allow us to include dice until we have included the entire set $D$.
-If we add any die $d_{f_3}$ to the set $D$, giving us the set $D\cup \{d_{f_3}\}$, then our expectation becomes: $$E_{D\cup\{d_{f_3}\}}(\theta) = \frac{f_3 \cdot \Pi_D}{f_2\lfloor f_3 \cdot \Pi_D/f_2\rfloor}$$
+If we add any die $d_{f_3}$ to the set $D$, giving us the set $D\cup \{d_{f_3}\}$, then our expectation becomes $E_{D\cup\{d_{f_3}\}}(\theta) = \frac{f_3 \cdot \Pi_D}{f_2\lfloor f_3 \cdot \Pi_D/f_2\rfloor}$.
 We now want to show that this value is never more than the expectation without $d_{f_3}$. 
 Comparing the two and simplifying, we find:
 \begin{align}
@@ -148,7 +148,7 @@ Thus, it seems that there is no easy way to compute the optimal number of throws
 
 \par Despite this, an interesting and computationally efficient case to analyze is when we have an unlimited set of the same die.
 For a set of $n$ dice each with a face value of $f_1$ there are $T = f_1^n$ outcomes and $t = f_1^n \left\lfloor \frac{f_2}{f_1^n} \right\rfloor$ outcomes where we need to re-roll.
-This gives us the following expression to minimize: $$E_n(r) = nE_n(\theta)= \frac{nT}{t} = \frac{nf_1^n}{f_2 \left \lfloor \frac{f_1^n}{f_2} \right \rfloor}$$
+This gives us the following expression to minimize: $$E_n(r) = nE_n(\theta)= \frac{nT}{t} = \frac{nf_1^n}{f_2 \left \lfloor \frac{f_1^n}{f_2} \right \rfloor}$$ 
 Yuck! 
 That floor function and those exponents don't look very friendly, and it turns out that they complicate things significantly.
 Some of the problems with this minimization become more apparent when we actually graph this as a function of $n$ for particular values of $f_1$ and $f_2$, as shown in figure \ref{fig:num-rolls}.
@@ -163,11 +163,11 @@ Despite the fact that the graph is piecewise monotone increasing, these disconti
 We also care in particular about integer values of the function, which are evidently not the minima one would obtain from the function when considering non-integer values as well.
 Quite a predicament!
 \par In order to make some progress on this, it will help to note the bounds of the function.
+Since the numerator of $E_n(r)$ is $n$ and the denominator is always between 0 and 1, we find that the function always takes a value which is at least $n$, i.e., $E_n(r) > n$.
 In order to find the upper bound of $E_n(r)$, we need to minimize its denominator.
+% TODO finish this, dammit
 Because the denominator corresponds to the number of outcomes where we don't need to re-roll, we can write it as $f_1^n - r$, where $r$ is the remainder of $f_1^n / f_2$, corresponding to the number of outcomes where we do need to re-roll.
-Since the remainder is bounded above by $f_2$, we find that $E_n(r)$ is bounded above by $\frac{nf_1^n}{f_1^n-f_2}$, i.e., $E_n(r) \le \frac{nf_1^n}{f_1^n-f_2}$.
-Next, to determine the lower bound, we divide the numerator and denominator of our equation by $f_1^n$ to get: $$E_n(r) = \frac{n}{\frac{f_2}{f_1^n} \left \lfloor \frac{f_1^n}{f_2} \right \rfloor}$$
-Since the numerator here is $n$ and the denominator is always between 0 and 1, we find that the function is bounded below by $n$, i.e., $E_n(r) \ge n$.
+Since the remainder is bounded above by $f_2$, we find that $E_n(r)$ is bounded above by $\frac{nf_1^n}{f_1^n-f_2}$.
 The graph of this expectation is shown with its bounds in figure \ref{fig:num-rolls-with-bounds}.\footnote{It is worth noting that the upper bound has an asymptote where $f_1^n=f_2$; to the left of this asymptote, values of the function are negative, so we ignore them.}
 \begin{figure}
     \centering
@@ -175,7 +175,7 @@ The graph of this expectation is shown with its bounds in figure \ref{fig:num-ro
     \caption{Expected number of dice rolled with $f_1=3$ and $f_2=5$. Integer values are shown in red. Upper bound is shown in orange, lower bound in green.}
     \label{fig:num-rolls-with-bounds}
 \end{figure}
-\par A quick inspection the second derivative of the upper bound with respect to $n$ reveals that this function is concave up in the regions where $E_n(r)$ is defined.
+\par A quick inspection the second derivative of this upper bound with respect to $n$ reveals that this function is concave up in the regions where $E_n(r)$ is defined.
 Now, since the function we want to minimize is bounded below by an increasing function and bounded above by a function which is concave up, it follows that there is some minimum value $m$ such that $E_n(r) > E_m(r)$ for all $n > m$.
 If we could find  this $m$, we would only need to check values less than it to determine which one minimizes the expected number of rolls.
 Thus, it seems useful to find when $E_n(r)$ always increases when we add another die, i.e., $E_{n+1}(r) > E_n(r)$ for all positive integers $n > m$.
@@ -229,6 +229,5 @@ It is worth noting that because the ``free die'' you receive will never divide $
 I'm not sure what this could possibly be used for.
 It's technically a form of rejection sampling for some very constrained discrete distributions, but in any sort of computational application it's faster to just generate a continuous random value from 0 to 1 and scale it to the size that you need.
 I would like to find an algorithm which will guarantee a valid value in finitely many rolls, but I'm not sure whether or not an algorithm exists (I'm inclined to think it doesn't).
-Either way, I enjoyed thinking about this problem, and I hope you enjoyed reading about it!
+Either way, I had fun thinking about this problem, and I hope you enjoyed reading about it!
 \end{document}
-
