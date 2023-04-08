@@ -175,9 +175,10 @@ The graph of this expectation is shown with its bounds in figure \ref{fig:num-ro
     \caption{Expected number of dice rolled with $f_1=3$ and $f_2=5$. Integer values are shown in red. Upper bound is shown in orange, lower bound in green.}
     \label{fig:num-rolls-with-bounds}
 \end{figure}
-\par A quick inspection the second derivative of the upper bound with respect to $n$ reveals that this function is concave up in the regions where $E_n(r)$ is defined.
-Now, since the function we want to minimize is bounded below by an increasing function and bounded above by a function which is concave up, it follows that there is some minimum value $m$ such that $E_n(r) > E_m(r)$ for all $n > m$.
-If we could find  this $m$, we would only need to check values less than it to determine which one minimizes the expected number of rolls.
+\par It is easy to see that the both the lower and upper bounds of the number of dice rolled both approach $n$ as $n$ grows large.
+In other words, as the number of dice in each throw grows large, we expect to eventually have one throw consisting of all of the dice.
+Since the bounds are both increasing and become arbitrarily close to each other, it follows that there is some minimum value $m$ such that $E_n(r) > E_m(r)$ for all $n > m$.
+If we could find this $m$, we would only need to check values less than it to determine which one minimizes the expected number of rolls.
 Thus, it seems useful to find when $E_n(r)$ always increases when we add another die, i.e., $E_{n+1}(r) > E_n(r)$ for all positive integers $n > m$.
 For this, we can subtract the upper bound for $E_n(r)$ from the lower bound for $E_{n+1}(r)$, since this is the smallest the difference between consecutive terms could possibly be.
 Through some tedious algebra, we find:
@@ -220,15 +221,16 @@ Because $xe^x$ grows faster than $e^x$, the $W$ function grows slower than the l
 When we have a set of dice $D$ such that the product of their faces $\Pi_D = f_2 + r$, we can ``reuse'' rejected rolls.
 Specifically, there will be $r$ possible rolls which are rejected, which we can enumerate.
 Since each of these rolls is equally likely, we can treat the enumerated value of the rejected roll as an extra roll of a $r$ sided die on our next roll.
-For instance, if we were rolling a $d_{13}$ with a $d_{24}$ (rolled as a $d_6$ and a $d_4$) and we rolled a 16, instead of throwing out the value of 16, we can treat it as if we rolled a 3 on an 11 sided die.
-This means we will have to modify our next roll, e.g., by only rolling the $d_4$, giving us effectively a $d_{44}$ when combined with the roll of the $d_{11}$.
-This complicates the analysis significantly, but essentially gives free rolls, thus reducing the total number of rolls in some cases.
+For instance, if we were rolling a $d_{13}$ with a $d_{20}$ and we rolled a 16, instead of throwing out the value of 16, we can use it as if we rolled a 3 on a $d_{7}$.
+This means that our next roll of the $d_{20}$ can be treated as a roll of a $d_{140}$ by combining it with the $d_{7}$ roll.
+By the earlier argument that increasing the number of dice in a set never increases the number of expected throws, having the extra roll never hurts, and can reduce the expected number of throws.
+Since we are also not actually rolling an extra die, the total number of dice physically rolled does not increase either, and may also go down.
+Overall, this complicates the analysis significantly, but essentially gives free rolls and thus reduces the total number of rolls in most cases.
 It is worth noting that because the ``free die'' you receive will never divide $f_2$, none of the modified rolls will ever divide $f_2$, and, as such, this scheme can still technically take infinitely many rolls to produce a valid value.
 
 \par Well, that's all I have on this topic so far. 
 I'm not sure what this could possibly be used for.
 It's technically a form of rejection sampling for some very constrained discrete distributions, but in any sort of computational application it's faster to just generate a continuous random value from 0 to 1 and scale it to the size that you need.
 I would like to find an algorithm which will guarantee a valid value in finitely many rolls, but I'm not sure whether or not an algorithm exists (I'm inclined to think it doesn't).
-Either way, I enjoyed thinking about this problem, and I hope you enjoyed reading about it!
+Either way, I had fun thinking about this problem, and I hope you enjoyed reading about it!
 \end{document}
-
