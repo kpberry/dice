@@ -52,8 +52,8 @@ Well, this nicely has a maximum value of 7, but falls apart when you realize tha
 However, rolling these two dice in this way has another, more insightful flaw.
 When rolling a $d_3$ and a $d_4$, there are $3 \cdot 4 = 12$ possible outcomes: $$(1, 1), (1, 2), (1, 3), (1, 4), (2, 1), (2, 2), (2, 3), (2, 4), (3, 1), (3, 2), (3, 3), (3, 4).$$
 However, the distribution we aim to recreate has 7 options which must be equally likely.
-By the pigeonhole principle, it is clear that an onto mapping from 12 inputs to 7 outputs cannot be done in such a way that all 7 outputs are equally likely; there will be at least two outputs which only have one input mapped to them, and there will be at least one output which has more than one output mapped to it, making that output more likely than at least one other output.
-This observation is true for any possible way of rolling a $d_{f_1}$ to produce the outputs of a $d_{f_2}$, where $f_2$ is not divisible by $f_1$.
+By the pigeonhole principle, it is clear that an onto mapping from 12 inputs to 7 outputs cannot be done in such a way that all 7 outputs are equally likely; there will be at least two outputs which only have one input mapped to them, and there will be at least one output which has more than one input mapped to it, making that output more likely than at least one other.
+Similarly, it is never possible to produce a perfect mapping from a $d_{f_1}$ to a $d_{f_2}$ when $f_2$ is not divisible by $f_1$.
 Clearly, then, any perfect rolling scheme which we come up with must have a number of outcomes which is divisible by the number of faces on the die that we want to roll, as was the case with our trick for rolling a $d_3$.
 
 \par While the $d_3$, $d_4$ combination failed to produce a way of rolling a $d_7$, there is another insight to be gleaned from this attempt.
